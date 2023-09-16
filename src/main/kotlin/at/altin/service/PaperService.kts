@@ -1,52 +1,52 @@
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class PaperService {
-
-    private val papers: MutableList<Paper> = mutableListOf()
+class PaperService @Autowired constructor(private val paperDao: PaperDao) {
 
     fun addPaper(author: String, title: String, publicationDate: Date, pageCount: Int) {
         val paper = Paper(author, title, publicationDate, pageCount)
-        papers.add(paper)
+        paperDao.save(paper)
     }
 
     fun getAllPapers(): List<Paper> {
-        return papers.toList()
+        return paperDao.findAll()
     }
 
-    fun deletePaper(index: Int) {
-        if (index >= 0 && index < papers.size) {
-            papers.removeAt(index)
-        }
+    fun deletePaper(id: Long) {
+        paperDao.deleteById(id)
     }
 
-    fun sortPapers(sortBy: Int) {
-        when (sortBy) {
-            1 -> papers.sortBy { it.author }
-            2 -> papers.sortBy { it.title }
-            3 -> papers.sortBy { it.publicationDate }
-            4 -> papers.sortBy { it.pageCount }
-            else -> {
-            }
+    fun sortPapers(sortBy: Int): List<Paper> {
+        return when (sortBy) {
+            1 -> paperDao.findAllByOrderByAuthor()
+            2 -> paperDao.findAllByOrderByTitle()
+            3 -> paperDao.findAllByOrderByPublicationDate()
+            4 -> paperDao.findAllByOrderByPageCount()
+            else -> emptyList()
         }
     }
 
     fun filterPapers(filterString: String): List<Paper> {
-        return papers.filter { it.containsFilterString(filterString) }
+        return paperDao.findAllByAuthorContainingIgnoreCaseOrTitleContainingIgnoreCase(filterString, filterString)
     }
 
-    fun addReference(sourceIndex: Int, targetIndex: Int) {
-        if (sourceIndex >= 0 && sourceIndex < papers.size && targetIndex >= 0 && targetIndex < papers.size) {
-            val sourcePaper = papers[sourceIndex]
-            val targetPaper = papers[targetIndex]
-            sourcePaper.addReference(targetPaper)
+    fun addReference(sourceId: Long, targetId: Long) {
+        val sourcePaper = paperDao.findById(sourceId)
+        val targetPaper = paperDao.findById(targetId)
+
+        if (sourcePaper.isPresent && targetPaper.isPresent) {
+            val source = sourcePaper.get()
+            val target = targetPaper.get()
+            source.addReference(target)
+            paperDao.save(source)
         }
     }
 
     fun showStatistics(): Map<String, Int> {
-        val totalPapers = papers.size
-        val totalReferences = papers.sumBy { it.referenceCount }
+        val totalPapers = paperDao.findAll().size
+        val totalReferences = paperDao.findAll().sumBy { it.getReferenceCount() }
 
         val statistics = mutableMapOf<String, Int>()
         statistics["totalPapers"] = totalPapers
