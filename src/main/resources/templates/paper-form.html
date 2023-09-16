@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Edit Paper</title>
+</head>
+<body>
+<h1>Edit Paper</h1>
+
+<form method="post" th:action="@{/papers/save}" th:object="${paper}">
+  <input type="hidden" th:field="*{id}" />
+
+  <label for="author">Author:</label>
+  <input type="text" id="author" th:field="*{author}" /><br/>
+
+  <label for="title">Title:</label>
+  <input type="text" id="title" th:field="*{title}" /><br/>
+
+  <label for="publicationDate">Publication Date:</label>
+  <input type="text" id="publicationDate" th:field="*{publicationDate}" /><br/>
+
+  <label for="pageCount">Page Count:</label>
+  <input type="text" id="pageCount" th:field="*{pageCount}" /><br/>
+
+  <button type="submit">Save</button>
+</form>
+
+<a th:href="@{/papers}">Back to List</a>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Papers</title>
+</head>
+<body>
+<h1>Papers</h1>
+
+<a th:href="@{/papers/new}">Add New Paper</a>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Author</th>
+        <th>Title</th>
+        <th>Publication Date</th>
+        <th>Page Count</th>
+        <th>Actions</th>
+    </tr>
+    <tr th:each="paper : ${papers}">
+        <td th:text="${paper.id}"></td>
+        <td th:text="${paper.author}"></td>
+        <td th:text="${paper.title}"></td>
+        <td th:text="${#dates.format(paper.publicationDate, 'yyyy-MM-dd')}"></td>
+        <td th:text="${paper.pageCount}"></td>
+        <td>
+            <a th:href="@{'/papers/' + ${paper.id}}">Edit</a>
+            <a th:href="@{'/papers/' + ${paper.id} + '/delete'}">Delete</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
