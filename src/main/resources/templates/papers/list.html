@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Papers</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+  <h1 class="my-4">Papers</h1>
+
+  <button onclick="window.location.href='/papers/new.html'" class="btn btn-primary mb-3">Add New Paper</button>
+
+
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Author</th>
+      <th>Title</th>
+      <th>Publication Date</th>
+      <th>Page Count</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="paper : ${papers}">
+      <td th:text="${paper.id}"></td>
+      <td th:text="${paper.author}"></td>
+      <td th:text="${paper.title}"></td>
+      <td th:text="${#dates.format(paper.publicationDate, 'yyyy-MM-dd')}"></td>
+      <td th:text="${paper.pageCount}"></td>
+      <td>
+        <button onclick="window.location.href='/papers/' + ${paper.id} + '/edit'" class="btn btn-warning btn-sm">Edit</button>
+        <button onclick="window.location.href='/papers/' + ${paper.id} + '/delete'" class="btn btn-danger btn-sm">Delete</button>
+        <button onclick="window.location.href='/papers/' + ${paper.id} + '/addReference'" class="btn btn-info btn-sm">Add Reference</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

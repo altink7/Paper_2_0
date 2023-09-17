@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Statistics</title>
+</head>
+<body>
+<h1>Statistics</h1>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Statistic</th>
+        <th>Value</th>
+    </tr>
+    <tr>
+        <td>Total Papers</td>
+        <td th:text="${statistics.totalPapers}"></td>
+    </tr>
+    <tr>
+        <td>Total References</td>
+        <td th:text="${statistics.totalReferences}"></td>
+    </tr>
+</table>
+
+<a th:href="@{/papers}" class="btn btn-secondary">Back to List</a>
+</body>
+</html>
